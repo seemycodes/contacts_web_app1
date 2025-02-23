@@ -390,15 +390,12 @@ function deleteContact(contactId) {
     }
 }
 
-function createContact() {
+async function createContact() {
     const firstName = document.getElementById("contact-first-name").value.trim();
     const lastName = document.getElementById("contact-last-name").value.trim();
     const email = document.getElementById("contact-email").value.trim();
     const phone = document.getElementById("contact-phone").value.trim();
     const imageInput = document.getElementById("image-preview");
-
-    // image or default placeholder
-    const image = imageInput.src.includes("base64") ? imageInput.src : "https://www.pngall.com/wp-content/uploads/15/User.png";
 
     // Validate input
     if (!firstName || !email || !phone) {
@@ -414,33 +411,50 @@ function createContact() {
         return;
     }
 
-    // Generate a new ID
-    const newId = contacts.length > 0 ? Math.max(...contacts.map(c => c.id)) + 1 : 1;
-
-    // Create new contact object
+    //  API schema
     const newContact = {
-        id: newId,
-        firstName,
-        lastName,
-        email,
-        phone,
-        image
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        email: email
     };
 
-    // Add new contact to global array
-    contacts.push(newContact);
+    // optional image
+    if (imageInput.src && !imageInput.src.includes("pngall.com")) {
+        newContact.image = imageInput.src;
+    }
 
-    // Re-render the contact list
-    renderContacts(contacts);
+    try {
+        const response = await fetch("http://localhost:8000/contacts/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newContact)
+        });
 
-    // Close form and reset fields
-    closeForm();
-    document.getElementById("contact-first-name").value = "";
-    document.getElementById("contact-last-name").value = "";
-    document.getElementById("contact-email").value = "";
-    document.getElementById("contact-phone").value = "";
-    document.getElementById("image-preview").src = "";
-    document.getElementById("image-preview").style.display = "none";
+        if (!response.ok) {
+            throw new Error(`Failed to create contact. Status: ${response.status}`);
+        }
 
-    alert("Contact added successfully!");
+        const createdContact = await response.json();
+        console.log("Contact Created:", createdContact);
+
+        alert("Contact added successfully!");
+
+        // Refresh the contacts list
+        loadContacts();
+
+        // Close form 
+        closeForm();
+        document.getElementById("contact-first-name").value = "";
+        document.getElementById("contact-last-name").value = "";
+        document.getElementById("contact-email").value = "";
+        document.getElementById("contact-phone").value = "";
+        document.getElementById("image-preview").src = "";
+        document.getElementById("image-preview").style.display = "none";
+    } catch (error) {
+        console.error("Error adding contact:", error);
+        alert("Failed to add contact. Please try again.");
+    }
 }
