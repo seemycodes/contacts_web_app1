@@ -18,6 +18,16 @@ async function loadContacts() {
     }
 }
 
+function groupContactsByAlphabet(contacts) {
+    const grouped = {};
+    contacts.forEach(contact => {
+        const letter = contact.firstName[0].toUpperCase();
+        if (!grouped[letter]) grouped[letter] = [];
+        grouped[letter].push(contact);
+    });
+    return grouped;
+}
+
 
 function renderContacts(contactsData) {
     contacts = contactsData; // Update global contacts array
