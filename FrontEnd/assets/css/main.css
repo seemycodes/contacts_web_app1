@@ -1,0 +1,44 @@
+body {
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+/* Header */
+/*  Fonts */
+.headerfont {
+    font-size: 48px;
+    text-align: center;
+}
+
+/* Admin Banner */
+.Admin-Header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.Admin-Header-container img {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.Admin-Header-container h1 {
+    font-size: 30px;
+    margin: 0 10px;
+    font-weight: 400;
+}
+
+.Admin-Header-container p {
+    margin-left: auto;
+    text-align: right;
+    font-size: 16px;
+    font-weight: 500;
+}
