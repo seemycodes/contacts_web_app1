@@ -293,18 +293,34 @@ document.addEventListener("click", function (event) {
     }
 });
 
-function deleteAllContacts() {
-    if (!confirm("Are you sure you want to delete all contacts?")) {
-        return; // Stop if cancels
+async function deleteAllContacts() {
+    if (!confirm("Are you sure you want to delete all contacts? This action cannot be undone!")) {
+        return; // Stop if cancel
     }
 
-    // Clear array
-    contacts = [];
+    try {
+        const response = await fetch("http://localhost:8000/contacts/", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
 
-    // Re-render the empty list
-    renderContacts(contacts);
+        if (!response.ok) {
+            throw new Error(`Failed to delete all contacts. Status: ${response.status}`);
+        }
 
-    alert("All contacts have been deleted!");
+        alert("All contacts have been deleted successfully!");
+
+        // Clear global array
+        contacts = [];
+
+        // Re-render the UI
+        renderContacts(contacts);
+    } catch (error) {
+        console.error("Error deleting all contacts:", error);
+        alert("Failed to delete all contacts. Please try again.");
+    }
 }
 
 function logout() {
