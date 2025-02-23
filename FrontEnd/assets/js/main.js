@@ -39,7 +39,7 @@ function renderContacts(contactsData) {
     Object.keys(groupedContacts).sort().forEach(letter => {
         const group = groupedContacts[letter];
 
-        // Add the alphabet section header
+        // alphabet section header
         const sectionHeader = document.createElement("div");
         sectionHeader.classList.add("contact-section-header");
         sectionHeader.innerHTML = `<h3 class="contact-alphabet-header">${letter}</h3>`;
@@ -95,7 +95,7 @@ function renderContacts(contactsData) {
                             </div>
                         </div>
                         <div class="expanded-actions">
-                            <!-- 🔥 Ensure phone & email buttons are above edit & delete -->
+                            <!-- makesure phone email btns are abov editn delete -->
                                 <button class="contact-btn email-btn" onclick="event.stopPropagation(); window.location.href='tel:${phone}';">
                                     <i class="bi bi-telephone"></i>
                                 </button>
@@ -114,19 +114,19 @@ function renderContacts(contactsData) {
 
             container.appendChild(card);
 
-            // ✅ Attach event listener for toggling the card
+            //event listener toggling
             card.addEventListener("click", function (event) {
                 toggleCard(event, card);
             });
 
-            // ✅ Attach event listener for the edit button
+            // listener - edit btn
             const editButton = card.querySelector(".custom-edit-button");
             editButton.addEventListener("click", function (event) {
                 event.stopPropagation(); // Prevent toggling when clicking edit
                 openEditForm(contact.id);
             });
 
-            // ✅ Attach event listener for the delete button
+            //  event listener -dlt btn
             const deleteButton = card.querySelector(".custom-delete-button");
             deleteButton.addEventListener("click", function (event) {
                 event.stopPropagation(); // Prevent card expansion when clicking delete
@@ -143,3 +143,37 @@ function renderContacts(contactsData) {
 document.addEventListener("DOMContentLoaded", () => {
     loadContacts();
 });
+
+
+
+function toggleCard(event, card) {
+    if (event.target.closest("button")) return; // Prevent button clicks from toggling
+
+    console.log("Toggling card:", card); // debugging
+
+    const allCards = document.querySelectorAll(".contacts-card");
+
+    allCards.forEach(c => {
+        if (c !== card) {
+            c.classList.remove("expanded");
+            let info = c.querySelector(".contact-info");
+            let actions = c.querySelector(".contact-actions");
+            if (info) info.style.display = "flex";
+            if (actions) actions.style.display = "flex";
+        }
+    });
+
+    const isExpanding = !card.classList.contains("expanded");
+    card.classList.toggle("expanded");
+
+    let info = card.querySelector(".contact-info");
+    let actions = card.querySelector(".contact-actions");
+
+    if (isExpanding) {
+        if (info) info.style.display = "none";
+        if (actions) actions.style.display = "none";
+    } else {
+        if (info) info.style.display = "flex";
+        if (actions) actions.style.display = "flex";
+    }
+}
