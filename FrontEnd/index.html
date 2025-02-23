@@ -23,22 +23,41 @@
                 <h2 class="headerfont">Contacts</h2>
             </div>
         </div>
-    </div>
 
-    <!-- Admin Header Row  -->
-    <div class="row">
-        <div class="col-sm-12 d-flex justify-content-center p-2">
-            <div class="Admin-Header-container">
-                <img src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
-                    alt="Admin Image">
-                <h1>Admin User</h1>
-                <p id="contact-count">Loading contacts...</p>
+        <!-- Admin Header Row  -->
+        <div class="row">
+            <div class="col-sm-12 d-flex justify-content-center p-2">
+                <div class="Admin-Header-container">
+                    <img src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                        alt="Admin Image">
+                    <h1>Admin User</h1>
+                    <p id="contact-count">Loading contacts...</p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <script>
-    </script>
+        <!-- Search Bar Row -->
+        <div class="row">
+            <div class="col-sm-12 d-flex justify-content-center p-2">
+                <div class="searchbar-container">
+                    <input type="text" class="searchbar form-control" placeholder="Search Name, Phone Number, Email">
+                    <button class="btn custombutton custombutton1"><i class="bi bi-plus"></i></button>
+                    <button class="btn custombutton custombutton2"><i class="bi bi-three-dots"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2" id="action-dropdown" style="display: none;">
+            <div class="col-sm-12 d-flex justify-content-center">
+                <div class="dropdown-menu p-3 d-flex  align-items-center"
+                    style="background: white; border: 1px solid #ccc; width: 100%; max-width: 1500px; display: flex; position: relative; z-index: 1000;">
+                    <button class="btn btn-danger flex-grow-1 me-2" onclick="deleteAllContacts()">Delete All
+                        Contacts</button>
+                    <button class="btn btn-secondary flex-grow-1" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+        </script>
 </body>
 
 </html>
