@@ -2,18 +2,41 @@ let contacts = []; // Store contacts globally
 
 async function loadContacts() {
     try {
-        const response = await fetch("assets/json/sample.json");
-        if (!response.ok) throw new Error("Failed to fetch contacts.");
-        
+        const response = await fetch("http://localhost:8000/contacts/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch contacts. Status: ${response.status}`);
+        }
+
         const data = await response.json();
-        contacts = data || []; // contacts is an array
+        console.log("API Response:", data); // Debugging: Log API response
+
+        // Ensure API returns an array
+        if (!data || !Array.isArray(data)) {
+            throw new Error("Invalid API response: Expected an array.");
+        }
+
+        // API data keys to frontend expectations : todo - write a normalizer function
+        contacts = data.map(contact => ({
+            id: contact.id,
+            firstName: contact.first_name,  //  first_name to firstName
+            lastName: contact.last_name,    // last_name to lastName`
+            email: contact.email,
+            phone: contact.phone,
+            image: contact.image || "https://www.pngall.com/wp-content/uploads/15/User.png"
+        }));
 
         document.getElementById("contact-count").textContent = `${contacts.length} contacts`;
         renderContacts(contacts); // Render contacts
     } catch (error) {
-        console.error("Error loading contacts:", error);
+        console.error("Error loading contacts:", error.message);
         document.getElementById("contact-count").textContent = "Failed to load contacts";
-        contacts = []; // contacts is empty array
+        contacts = []; // Ensure contacts is always an array
         renderContacts(contacts);
     }
 }
