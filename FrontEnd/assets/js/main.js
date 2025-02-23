@@ -337,13 +337,24 @@ function closeEditForm() {
     document.getElementById("edit-contact-form").style.display = "none";
 }
 
-function updateContact() {
+async function updateContact() {
     const id = document.getElementById("edit-contact-id").value;
     const firstName = document.getElementById("edit-contact-first-name").value.trim();
     const lastName = document.getElementById("edit-contact-last-name").value.trim();
     const email = document.getElementById("edit-contact-email").value.trim();
     const phone = document.getElementById("edit-contact-phone").value.trim();
-    const image = document.getElementById("edit-image-preview").src;
+    const imageInput = document.getElementById("edit-image-preview");
+
+    if (!id) {
+        alert("Invalid contact ID.");
+        return;
+    }
+
+    // Validate input fields
+    if (!firstName || !email || !phone) {
+        alert("First Name, Email, and Phone are required!");
+        return;
+    }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const phoneRegex = /^\d{10,15}$/;
@@ -353,13 +364,45 @@ function updateContact() {
         return;
     }
 
-    let contactIndex = contacts.findIndex(c => c.id == id);
-    if (contactIndex !== -1) {
-        contacts[contactIndex] = { id, firstName, lastName, email, phone, image };
-        renderContacts(contacts); // Refresh UI
+    // Data for API request
+    const updatedContact = {
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        email: email
+    };
+
+    if (imageInput.src && !imageInput.src.includes("pngall.com")) {
+        updatedContact.image = imageInput.src;
     }
 
-    closeEditForm();
+    try {
+        const response = await fetch(`http://localhost:8000/contacts/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedContact)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update contact. Status: ${response.status}`);
+        }
+
+        const updatedContactData = await response.json();
+        console.log("Contact Updated:", updatedContactData);
+
+        alert("Contact updated successfully!");
+
+        // Refresh contacts list
+        loadContacts();
+
+        // Close the edit form
+        closeEditForm();
+    } catch (error) {
+        console.error("Error updating contact:", error);
+        alert("Failed to update contact. Please try again.");
+    }
 }
 
 //  event listener  edit buttons
