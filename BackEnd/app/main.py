@@ -49,3 +49,7 @@ def delete_contact(contact_id: int, db: Session = Depends(get_db)):
     if not success:
         raise HTTPException(status_code=404, detail="Contact not found")
     return {"message": "Contact deleted successfully"}
+
+@app.delete("/contacts/")
+def delete_all_contacts(db: Session = Depends(get_db)):
+    return crud.delete_all_contacts(db)

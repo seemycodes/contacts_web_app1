@@ -36,3 +36,8 @@ def delete_contact(db: Session, contact_id: int):
         db.commit()
         return True
     return False
+
+def delete_all_contacts(db: Session):
+    db.query(models.Contact).delete()
+    db.commit()
+    return {"message": "All contacts have been deleted!"}
