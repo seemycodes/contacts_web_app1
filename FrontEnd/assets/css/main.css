@@ -7,18 +7,23 @@ body {
     flex-direction: column;
 }
 
-/* Header */
-/*  Fonts */
-.headerfont {
+.headerfont{
     font-size: 48px;
     text-align: center;
 }
 
-/* Admin Banner */
+.headerrow {
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+}
+
 .Admin-Header-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
     padding: 10px 0;
 }
@@ -40,10 +45,10 @@ body {
     margin-left: auto;
     text-align: right;
     font-size: 16px;
+    color: #555;
     font-weight: 500;
 }
 
-/* Search Bar */
 .searchbar-container {
     display: flex;
     align-items: center;
@@ -57,12 +62,69 @@ body {
     color: black !important;
     border-radius: 10rem;
     height: 45px;
+    border: none;
     flex-grow: 1;
     padding: 0 15px;
     margin: 9px;
 }
 
-.searchbar::placeholder {
+::placeholder {
+    text-align: center;
+    font-size: 15px;
+    color: black;
+}
+
+/* Admin Header Container: Ensures Vertical Alignment */
+.Admin-Header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.Admin-Header-container img {
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    object-fit: cover;
+    /* Ensures the image doesn't stretch */
+}
+
+.Admin-Header-container h1 {
+    font-size: 30px;
+    margin: 0 10px;
+    font-weight: 400;
+}
+
+.Admin-Header-container p {
+    margin-left: auto;
+    /* Moves "1800 contacts" to the right */
+    text-align: right;
+    font-size: 16px;
+    color: #555;
+    font-weight: 500;
+}
+
+.searchbar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1500px;
+}
+
+.searchbar {
+    background-color: #EFEFEF;
+    color: black !important;
+    border-radius: 10rem;
+    height: 45px;
+    border: none;
+    flex-grow: 1;
+    padding: 0 15px;
+    margin: 9px;
+}
+
+::placeholder {
     text-align: center;
     font-size: 15px;
     color: black;
@@ -93,41 +155,138 @@ body {
 }
 
 
-
-/*  Contact List */
-
-/* contact single row */
-.contact-main {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+/*  Forms */
+.fullscreen-form {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100% !important;
+    background: white;
+    justify-content: center;
     align-items: center;
+    z-index: 9999;
 }
 
+.contact-form-container {
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 20px;
+    border: #e2e2e2 solid 0.1em;
+    /* text-align: left; */
 
-/* collapsed phone email btns */
-.contact-actions {
-    display: flex;
-    gap: 10px;
 }
 
-.contact-btn {
-    background: none;
+.form-container {
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    text-align: left;
+}
+
+.form-container label,
+.form-container input {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 5px;
+}
+
+.form-container label {
+    width: 100px;
+    font-weight: bold;
+}
+
+.form-container input {
+    width: calc(100% - 120px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.form-actions button {
+    margin: 10px;
+    padding: 10px 15px;
     border: none;
-    font-size: 18px;
     cursor: pointer;
-    color: #555;
-    transition: color 0.3s ease-in-out;
 }
 
-.contact-btn:hover {
-    color: black;
+.form-actions button:first-child {
+    background: #28a745;
+    color: white;
 }
 
-.contact-details {
-    display: block;
+.form-actions button:last-child {
+    background: #dc3545;
+    color: white;
 }
 
+
+/* Cards new import*/
+.hide-scrollbar{
+    flex-grow: 1; /* Allows the list to take up remaining space */
+    overflow-y: auto; /* Enables scrolling only when necessary */
+    scrollbar-width: none !important; /* Hide scrollbar in Firefox */
+    -ms-overflow-style: none !important; /* Hide scrollbar in IE/Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    width: 0px !important;
+    display: none !important;
+}
+
+.contact-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+    justify-content: center;
+}
+
+.contact-image-container label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.image-preview {
+    margin-top: 10px;
+}
+
+#action-dropdown .dropdown-menu {
+    border: none !important;
+    background-color: #f1f1f1 !important;
+    width: 100%;
+    max-width: 1500px;
+    display: flex;
+    justify-content: center;
+    /* Center in row */
+    align-items: center;
+    gap: 10px;
+    /* Keep buttons near but not too far */
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+#action-dropdown button {
+    padding: 8px 15px;
+    /* Smaller padding */
+    font-size: 14px;
+    /* Smaller font size */
+    text-align: center;
+    max-width: fit-content;
+}
+
+.card-button {
+    height: 30px !important;
+    width: 30px !important;
+}
+
+/* Contact Card Styles */
 .contacts-card {
     display: flex;
     flex-direction: column;
@@ -145,6 +304,19 @@ body {
     transition: all 0.5s ease;
 }
 
+
+.contact-section-header {
+    padding: 10px 15px;
+    margin-top: 15px;
+    width: 100%;
+    max-width: 1500px;
+    border-radius: 10px;
+}
+
+.contact-alphabet-header {
+    font-size: medium;
+}
+
 .contacts-card-top {
     border-radius: 20px 20px 0px 0px;
 }
@@ -157,20 +329,61 @@ body {
     border-radius: 20px;
 }
 
-
-.contact-alphabet-header {
-    font-size: medium;
+.contact-img {
+    width: 40px;
+    height: 40px;
+    margin: 0px 10px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: width 0.3s, height 0.3s;
 }
 
-.contact-section-header {
-    padding: 10px 15px;
-    margin-top: 15px;
-    width: 100%;
-    max-width: 1500px;
-    border-radius: 10px;
+/* Contact Info (Image + Name) */
+.contact-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 
-/* Contact Details expnd */
+
+.contact-name {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Expanded Card */
+.expanded {
+    max-height: 300px;
+    flex-direction: column;
+    align-items: start;
+    padding: 15px;
+    border-radius: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.expanded .contact-img {
+    width: 80px;
+    height: 80px;
+}
+
+.expanded .contact-info {
+    flex-direction: column;
+    align-items: start;
+}
+
+.expanded .contact-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.contact-details {
+    display: block;
+}
+
+/* Contact Details (Expanded) */
 .contact-details {
     max-height: 0;
     opacity: 0;
@@ -193,35 +406,69 @@ body {
 
 }
 
-/* EXP contac Info */
+
+.expanded .contact-details {
+    max-height: 400px !important;
+    /* Set this high enough for your content */
+    opacity: 1;
+}
+
+/* Edit & Delete Buttons */
+.edit-button,
+.delete-button {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Main row with name + email/phone (Collapsed State) */
+.contact-main {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+
+/* Call & Email Buttons (Collapsed - Right Side) */
+.contact-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.contact-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s ease-in-out;
+}
+
+.contact-btn:hover {
+    color: black;
+}
+
+
+/* Expanded Contact Info */
 .contact-info-expanded {
     display: flex;
+    /* flex-direction: column; */
+    /* align-items: start!important; */
+    /* margin-top: 10px; */
 }
 
+.expanded-contact-name {
+    /* text-align: center; */
+    font-size: 1rem !important;
+    /* font-size: 1.2em; */
+    font-weight: bold !important;
+    margin: 1rem;
 
-
-/* Contact Info (Img-Nam) */
-.contact-info {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
 }
 
-.contact-img-container {
-    display: flex;
-    align-items: center;
-}
-
-.contact-img {
-    width: 40px;
-    height: 40px;
-    margin: 0px 10px;
-    border-radius: 50%;
-    object-fit: cover;
-    transition: width 0.3s, height 0.3s;
-}
-
-/* Large Image expnd */
+/* Larger Image for Expanded View */
 .contact-img-large {
     width: 80px;
     height: 80px;
@@ -230,77 +477,71 @@ body {
     /* align-items: end; */
 }
 
-.contact-name {
-    font-size: 18px;
-    font-weight: 500;
+/* Centered Contact Details */
+.contact-detail-text {
+    font-size: 16px;
+    margin: 5px 0;
 }
 
-.contact-text-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.custom-edit-button,
-.custom-delete-button {
-    /* background-color: #555; */
-    border: none;
-}
-
-/* Expanded Card */
-.expanded {
-    max-height: 300px;
-    flex-direction: column;
-    align-items: start;
-    padding: 15px;
-    border-radius: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    transition: all 0.3s ease-in-out;
-}
-
-.expanded .contact-details {
-    max-height: 400px !important;
-    /* Set  hight */
-    opacity: 1;
-}
-
-
-/* Expanded phone email btns */
+/* Expanded Call & Email Buttons */
 .expanded-actions {
     display: flex;
     flex-direction: column;
-    /* vertically */
+    /* Stack items vertically */
     justify-content: center;
+    /* Center align them */
     align-items: flex-end;
+    /* Align buttons to center */
     width: 100%;
+    /* Ensure it spans the full width */
     gap: 10px;
+    /* Adds spacing between buttons */
     margin: 10px;
+    /* Adds spacing from content above */
 
 }
 
-/* hover */
+/* Hover Effect */
 .expanded-actions .contact-btn:hover,
 .expanded-actions .custom-edit-button:hover,
 .expanded-actions .custom-delete-button:hover {
     color: #007bff;
 }
 
-.expanded .contact-img {
-    width: 80px;
-    height: 80px;
-}
 
-.expanded .contact-info {
-    flex-direction: column;
-    align-items: start;
-}
-
-.expanded .contact-name {
-    font-size: 22px;
-    font-weight: bold;
+/* Edit & Delete Buttons (Right Aligned) */
+.contact-buttons-right {
+    background-color: #555;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    width: 100%;
     margin-top: 10px;
 }
 
+
+.edit-button {
+    /* background-color: #FFD700; */
+    border: none;
+    color: black;
+}
+
+.delete-button {
+    /* background-color: #FF4C4C; */
+    border: none;
+    color: white;
+}
+
+.contact-img-container {
+    display: flex;
+    align-items: center;
+}
+
+
+.contact-text-container {
+    display: flex;
+    flex-direction: column;
+}
 
 .expanded-contact-details-text h6 {
     margin: 5px 0 0;
@@ -314,53 +555,45 @@ body {
     font-size: 1em;
 }
 
-.expanded-contact-name {
-    /* text-align: center; */
-    font-size: 1rem !important;
-    /* font-size: 1.2em; */
-    font-weight: bold !important;
-    margin: 1rem;
-
+.custom-edit-button,
+.custom-delete-button {
+    /* background-color: #555; */
+    border: none;
 }
 
-/* hide the scrollbars*/
-.hide-scrollbar {
-    flex-grow: 1;
-    /* take up remaining space */
-    overflow-y: auto;
-    /* scrolling only when needed */
-    scrollbar-width: none !important;
-    /* Hide scrollbar Firefox */
-    -ms-overflow-style: none !important;
-    /* Hide scrollbar in Edge */
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-    width: 0px !important;
-    display: none !important;
-}
-
-
-#action-dropdown .dropdown-menu {
-    border: none !important;
-    background-color: #f1f1f1 !important;
+/* Update Contact */
+#edit-contact-form {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
     width: 100%;
-    max-width: 1500px;
-    display: flex;
+    background: white;
     justify-content: center;
-    /* Center in row */
     align-items: center;
-    gap: 10px;
-    /* Keep buttons near */
-    padding: 10px 20px;
-    border-radius: 10px;
 }
 
-#action-dropdown button {
-    padding: 8px 15px;
-    /* Small padding */
-    font-size: 14px;
-    /* Small font size */
+#edit-contact-form .form-container {
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    text-align: left;
+}
+
+#edit-contact-form .form-container label {
+    width: 100px;
+    font-weight: bold;
+}
+
+#edit-contact-form .form-container input {
+    width: calc(100% - 120px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#edit-contact-form .form-actions {
     text-align: center;
-    max-width: fit-content;
+    margin-top: 10px;
 }

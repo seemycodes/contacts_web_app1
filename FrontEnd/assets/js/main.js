@@ -1,4 +1,4 @@
-let contacts = []; // keep contacts globally
+let contacts = []; // Store contacts globally
 
 async function loadContacts() {
     try {
@@ -6,14 +6,14 @@ async function loadContacts() {
         if (!response.ok) throw new Error("Failed to fetch contacts.");
         
         const data = await response.json();
-        contacts = data || []; // make sure contacts is an array
+        contacts = data || []; // contacts is an array
 
         document.getElementById("contact-count").textContent = `${contacts.length} contacts`;
-        renderContacts(contacts); // 
+        renderContacts(contacts); // Render contacts
     } catch (error) {
         console.error("Error loading contacts:", error);
         document.getElementById("contact-count").textContent = "Failed to load contacts";
-        contacts = []; // if error, flush all
+        contacts = []; // contacts is empty array
         renderContacts(contacts);
     }
 }
@@ -28,9 +28,8 @@ function groupContactsByAlphabet(contacts) {
     return grouped;
 }
 
-
 function renderContacts(contactsData) {
-    contacts = contactsData; // Update global contacts array
+    contacts = contactsData; // global  array
 
     const groupedContacts = groupContactsByAlphabet(contacts);
     const container = document.querySelector(".contacts-list");
@@ -95,7 +94,7 @@ function renderContacts(contactsData) {
                             </div>
                         </div>
                         <div class="expanded-actions">
-                            <!-- makesure phone email btns are abov editn delete -->
+                            <!--force phone email btn above edit delete -->
                                 <button class="contact-btn email-btn" onclick="event.stopPropagation(); window.location.href='tel:${phone}';">
                                     <i class="bi bi-telephone"></i>
                                 </button>
@@ -114,22 +113,22 @@ function renderContacts(contactsData) {
 
             container.appendChild(card);
 
-            //event listener toggling
+            //  event listener  toggling card
             card.addEventListener("click", function (event) {
                 toggleCard(event, card);
             });
 
-            // listener - edit btn
+            // event listener edit button
             const editButton = card.querySelector(".custom-edit-button");
             editButton.addEventListener("click", function (event) {
-                event.stopPropagation(); // Prevent toggling when clicking edit
+                event.stopPropagation(); // fix clicking edit
                 openEditForm(contact.id);
             });
 
-            //  event listener -dlt btn
+            // event listener for the delete button
             const deleteButton = card.querySelector(".custom-delete-button");
             deleteButton.addEventListener("click", function (event) {
-                event.stopPropagation(); // Prevent card expansion when clicking delete
+                event.stopPropagation(); // expansion when clicking delete
                 deleteContact(contact.id);
             });
         });
@@ -139,17 +138,10 @@ function renderContacts(contactsData) {
 }
 
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    loadContacts();
-});
-
-
-
 function toggleCard(event, card) {
-    if (event.target.closest("button")) return; // Prevent button clicks from toggling
+    if (event.target.closest("button")) return; // button clicks toggling
 
-    console.log("Toggling card:", card); // debugging
+    console.log("Toggling card:", card); // Debugging
 
     const allCards = document.querySelectorAll(".contacts-card");
 
@@ -176,4 +168,256 @@ function toggleCard(event, card) {
         if (info) info.style.display = "flex";
         if (actions) actions.style.display = "flex";
     }
+}
+
+
+function openForm() {
+    document.getElementById("add-contact-form").style.display = "flex";
+}
+
+function closeForm() {
+    document.getElementById("add-contact-form").style.display = "none";
+}
+
+function saveContact() {
+    closeForm();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadContacts();
+    document.querySelector(".custombutton1").addEventListener("click", openForm);
+});
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const preview = document.getElementById("image-preview");
+        preview.src = reader.result;
+        preview.style.display = "block";
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+function saveContact() {
+    const emailInput = document.getElementById("contact-email");
+    const phoneInput = document.getElementById("contact-phone");
+
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^\d{10,15}$/; //10-15 digit
+
+    let isValid = true;
+
+    // Email Validation
+    if (!emailRegex.test(email)) {
+        emailInput.classList.add("is-invalid");
+        isValid = false;
+    } else {
+        emailInput.classList.remove("is-invalid");
+    }
+
+    // Phone  Validation
+    if (!phoneRegex.test(phone)) {
+        phoneInput.classList.add("is-invalid");
+        isValid = false;
+    } else {
+        phoneInput.classList.remove("is-invalid");
+    }
+
+    if (!isValid) {
+        alert("Please enter a valid email and phone number.");
+        return;
+    }
+
+    // Proceed with saving if validation passes
+    alert("Contact saved successfully!");
+    closeForm();
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const phoneInput = document.querySelector("#contact-phone");
+
+
+    //  saveContact function validate phone
+    function saveContact() {
+        if (!validatePhone()) {
+            alert("Please enter a valid phone number.");
+            return;
+        }
+        alert("Contact saved successfully!");
+        closeForm();
+    }
+
+    window.saveContact = saveContact;
+});
+
+document.querySelector(".custombutton2").addEventListener("click", function (event) {
+    event.stopPropagation(); // event bubbling fix
+    let dropdown = document.getElementById("action-dropdown");
+    if (dropdown.style.display === "none" || dropdown.style.display === "") {
+        dropdown.style.display = "flex";
+    } else {
+        dropdown.style.display = "none";
+    }
+});
+
+document.addEventListener("click", function (event) {
+    let dropdown = document.getElementById("action-dropdown");
+    if (dropdown.style.display === "flex" && !event.target.closest(".custombutton2")) {
+        dropdown.style.display = "none";
+    }
+});
+
+function deleteAllContacts() {
+    if (!confirm("Are you sure you want to delete all contacts?")) {
+        return; // Stop if cancels
+    }
+
+    // Clear array
+    contacts = [];
+
+    // Re-render the empty list
+    renderContacts(contacts);
+
+    alert("All contacts have been deleted!");
+}
+
+function logout() {
+    alert("Logged out!");
+    // Todo Logout
+}
+
+
+function openEditForm(contactId) {
+    let contact = contacts.find(c => c.id == contactId);
+    if (!contact) {
+        alert("Error: Contact not found!");
+        return;
+    }
+
+    document.getElementById("edit-contact-id").value = contact.id;
+    document.getElementById("edit-contact-first-name").value = contact.firstName || "";
+    document.getElementById("edit-contact-last-name").value = contact.lastName || "";
+    document.getElementById("edit-contact-email").value = contact.email || "";
+    document.getElementById("edit-contact-phone").value = contact.phone || "";
+
+    let imagePreview = document.getElementById("edit-image-preview");
+    imagePreview.src = contact.image || "https://via.placeholder.com/150";
+    imagePreview.style.display = contact.image ? "block" : "none";
+
+    document.getElementById("edit-contact-form").style.display = "flex";
+}
+
+function closeEditForm() {
+    document.getElementById("edit-contact-form").style.display = "none";
+}
+
+function updateContact() {
+    const id = document.getElementById("edit-contact-id").value;
+    const firstName = document.getElementById("edit-contact-first-name").value.trim();
+    const lastName = document.getElementById("edit-contact-last-name").value.trim();
+    const email = document.getElementById("edit-contact-email").value.trim();
+    const phone = document.getElementById("edit-contact-phone").value.trim();
+    const image = document.getElementById("edit-image-preview").src;
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^\d{10,15}$/;
+
+    if (!emailRegex.test(email) || !phoneRegex.test(phone)) {
+        alert("Please enter a valid email and phone number.");
+        return;
+    }
+
+    let contactIndex = contacts.findIndex(c => c.id == id);
+    if (contactIndex !== -1) {
+        contacts[contactIndex] = { id, firstName, lastName, email, phone, image };
+        renderContacts(contacts); // Refresh UI
+    }
+
+    closeEditForm();
+}
+
+//  event listener  edit buttons
+document.addEventListener("click", function (event) {
+    let editButton = event.target.closest(".custom-edit-button");
+    if (editButton) {
+        let contactCard = editButton.closest(".contacts-card");
+        if (contactCard) {
+            let contactId = contactCard.getAttribute("data-id");
+            openEditForm(parseInt(contactId)); // Ensure it's an integer
+        }
+    }
+});
+
+function deleteContact(contactId) {
+    if (!confirm("Are you sure you want to delete this contact?")) {
+        return; // Stop if cancels
+    }
+
+    // Find the index of the contact to delete
+    const index = contacts.findIndex(contact => contact.id == contactId);
+    if (index !== -1) {
+        contacts.splice(index, 1); // Remove from array
+        renderContacts(contacts); // Re-render 
+        alert("Contact deleted successfully!");
+    } else {
+        alert("Error: Contact not found!");
+    }
+}
+
+function createContact() {
+    const firstName = document.getElementById("contact-first-name").value.trim();
+    const lastName = document.getElementById("contact-last-name").value.trim();
+    const email = document.getElementById("contact-email").value.trim();
+    const phone = document.getElementById("contact-phone").value.trim();
+    const imageInput = document.getElementById("image-preview");
+
+    // image or default placeholder
+    const image = imageInput.src.includes("base64") ? imageInput.src : "https://www.pngall.com/wp-content/uploads/15/User.png";
+
+    // Validate input
+    if (!firstName || !email || !phone) {
+        alert("First Name, Email, and Phone are required!");
+        return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^\d{10,15}$/; // 10-15 digit phone numbers
+
+    if (!emailRegex.test(email) || !phoneRegex.test(phone)) {
+        alert("Please enter a valid email and phone number.");
+        return;
+    }
+
+    // Generate a new ID
+    const newId = contacts.length > 0 ? Math.max(...contacts.map(c => c.id)) + 1 : 1;
+
+    // Create new contact object
+    const newContact = {
+        id: newId,
+        firstName,
+        lastName,
+        email,
+        phone,
+        image
+    };
+
+    // Add new contact to global array
+    contacts.push(newContact);
+
+    // Re-render the contact list
+    renderContacts(contacts);
+
+    // Close form and reset fields
+    closeForm();
+    document.getElementById("contact-first-name").value = "";
+    document.getElementById("contact-last-name").value = "";
+    document.getElementById("contact-email").value = "";
+    document.getElementById("contact-phone").value = "";
+    document.getElementById("image-preview").src = "";
+    document.getElementById("image-preview").style.display = "none";
+
+    alert("Contact added successfully!");
 }
