@@ -18,7 +18,7 @@ README.md  → Project setup guide
 
 ## 2. Clone & Run the API Locally  
 ```sh
-git clone https://github.com/seemycodes/repo.git
+git clone https://github.com/seemycodes/contacts_web_app1.git
 cd repo/BackEnd
 python -m venv venv
 venv\Scripts\Activate  # Windows
