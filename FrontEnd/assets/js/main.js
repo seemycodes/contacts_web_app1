@@ -178,8 +178,8 @@ function renderContacts(contactsData) {
             // event listener for the delete button
             const deleteButton = card.querySelector(".custom-delete-button");
             deleteButton.addEventListener("click", function (event) {
-                event.stopPropagation(); // expansion when clicking delete
-                deleteContact(contact.id);
+                event.stopPropagation(); // toggling
+                deleteContact(contact.id); //  deleteContact with ID
             });
         });
     });
@@ -462,19 +462,30 @@ document.addEventListener("click", function (event) {
     }
 });
 
-function deleteContact(contactId) {
+async function deleteContact(contactId) {
     if (!confirm("Are you sure you want to delete this contact?")) {
-        return; // Stop if cancels
+        return; // canceled
     }
 
-    // Find the index of the contact to delete
-    const index = contacts.findIndex(contact => contact.id == contactId);
-    if (index !== -1) {
-        contacts.splice(index, 1); // Remove from array
-        renderContacts(contacts); // Re-render 
+    try {
+        const response = await fetch(`${apiBaseUrl}/contacts/${contactId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete contact. Status: ${response.status}`);
+        }
+
         alert("Contact deleted successfully!");
-    } else {
-        alert("Error: Contact not found!");
+
+        // Refresh contacts list
+        loadContacts();
+    } catch (error) {
+        console.error("Error deleting contact:", error);
+        alert("Failed to delete contact. Please try again.");
     }
 }
 
