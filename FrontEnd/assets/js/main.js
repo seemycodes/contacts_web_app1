@@ -1,8 +1,35 @@
 let contacts = []; // Store contacts globally
+let apiBaseUrl = "http://localhost:8000"; // Default API (if config.json missing)
+
+
+// clean API base URL
+function getApiBaseUrl(baseUrl) {
+    baseUrl = baseUrl || "http://localhost:8000"; // Use localhost if not set
+    return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl; // Remove trailing slash
+}
+
+// load `config.json` dynamically
+async function loadConfig() {
+    try {
+        const response = await fetch("assets/configs/config.json"); // Load json
+        if (!response.ok) {
+            throw new Error("Config file not found, using default localhost API");
+        }
+
+        const config = await response.json();
+        apiBaseUrl = getApiBaseUrl(config.apiBaseUrl); // clean URL
+        console.log("API Base URL Loaded:", apiBaseUrl);
+    } catch (error) {
+        console.warn("Error loading configuration:", error.message);
+        console.warn("Using default API:", apiBaseUrl);
+    } finally {
+        loadContacts(); // makesure `apiBaseUrl` is set before making API calls
+    }
+}
 
 async function loadContacts() {
     try {
-        const response = await fetch("http://localhost:8000/contacts/", {
+        const response = await fetch(`${apiBaseUrl}/contacts/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -258,6 +285,8 @@ function saveContact() {
     closeForm();
 }
 
+// Ensure `config.json` is loaded before making API calls
+document.addEventListener("DOMContentLoaded", loadConfig);
 
 document.addEventListener("DOMContentLoaded", function () {
     const phoneInput = document.querySelector("#contact-phone");
@@ -299,7 +328,7 @@ async function deleteAllContacts() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/contacts/", {
+        const response = await fetch(`${apiBaseUrl}/contacts/`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -393,7 +422,7 @@ async function updateContact() {
     }
 
     try {
-        const response = await fetch(`http://localhost:8000/contacts/${id}`, {
+        const response = await fetch(`${apiBaseUrl}/contacts/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -484,7 +513,7 @@ async function createContact() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/contacts/", {
+        const response = await fetch(`${apiBaseUrl}/contacts/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
