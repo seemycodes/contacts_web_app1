@@ -1,4 +1,4 @@
 .vscode/
-Database/DB/contacts.db
+# Database/DB/contacts.db
 BackEnd/venv/
 BackEnd/app/__pycache__/
