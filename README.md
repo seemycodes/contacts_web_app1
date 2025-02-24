@@ -2,7 +2,7 @@
 This is a FastAPI-based Contact Management System Built With HTML, CSS, Bootstrap, and JavaScript.  
 
 - **Frontend (Live):** [seemy.codes](https://seemy.codes)  
-- **API (Live):** [api.seemy.codes](https://api.seemy.codes)  
+- **API (Live):** [api.seemy.codes/docs](https://api.seemy.codes/docs)  
 
 ---
 
@@ -24,13 +24,46 @@ python -m venv venv
 venv\Scripts\Activate  # Windows
 source venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn app.main:app --reload
 ```
 API runs locally at: `http://127.0.0.1:8000`  
 
 ---
 
-## 3. API Endpoints  
+## 3. API Integration  
+
+### If the API is NOT deployed on localhost, update `config.json` accordingly, 
+- **File Path:** `FronEend/assets/configs/config.json`  
+please see examples below
+
+#### Deployments using Domain Name  
+```json
+{
+    "apiBaseUrl": "https://example.com"
+}
+```
+#### Deployments using sub Domains  
+```json
+{
+    "apiBaseUrl": "https://api.example.com"
+}
+```
+#### Deployments using url endpoints  
+```json
+{
+    "apiBaseUrl": "https://example.com/URLendpoint"
+}
+```
+#### Deployments using Public IP and Port Number
+```json
+{
+    "apiBaseUrl": "https://12.34.56.78:8000"
+}
+```
+
+---
+
+## 4. API Endpoints  
 | Method | Endpoint | Description |  
 |--------|---------|-------------|  
 | GET | `/contacts/` | Get all contacts |  
@@ -43,7 +76,7 @@ Live API: [api.seemy.codes](https://api.seemy.codes)
 
 ---
 
-## 4. Access the Frontend (Live)  
+## 5. Access the Frontend (Live)  
 [seemy.codes](https://seemy.codes)  
 
 ---
