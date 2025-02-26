@@ -7,7 +7,7 @@ body {
     flex-direction: column;
 }
 
-.headerfont{
+.headerfont {
     font-size: 48px;
     text-align: center;
 }
@@ -148,7 +148,17 @@ body {
     background-color: #8BFFAA;
 }
 
+.custombutton1:hover {
+    background-color: #8BFFAA;
+}
+
 .custombutton2 {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+}
+
+.custombutton2:hover {
     background-color: white;
     border: 1px solid black;
     color: black;
@@ -228,11 +238,15 @@ body {
 
 
 /* Cards new import*/
-.hide-scrollbar{
-    flex-grow: 1; /* Allows the list to take up remaining space */
-    overflow-y: auto; /* Enables scrolling only when necessary */
-    scrollbar-width: none !important; /* Hide scrollbar in Firefox */
-    -ms-overflow-style: none !important; /* Hide scrollbar in IE/Edge */
+.hide-scrollbar {
+    flex-grow: 1;
+    /* Allows the list to take up remaining space */
+    overflow-y: auto;
+    /* Enables scrolling only when necessary */
+    scrollbar-width: none !important;
+    /* Hide scrollbar in Firefox */
+    -ms-overflow-style: none !important;
+    /* Hide scrollbar in IE/Edge */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -304,6 +318,14 @@ body {
     transition: all 0.5s ease;
 }
 
+.contacts-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-list-container {
+    display: none;
+}
 
 .contact-section-header {
     padding: 10px 15px;

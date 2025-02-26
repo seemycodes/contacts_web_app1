@@ -47,9 +47,17 @@
         <div class="row sticky-top bg-white">
             <div class="col-sm-12 d-flex justify-content-center p-2">
                 <div class="searchbar-container">
-                    <input type="text" class="searchbar form-control" placeholder="Search Name, Phone Number, Email">
-                    <button class="btn custombutton custombutton1"><i class="bi bi-plus"></i></button>
-                    <button class="btn custombutton custombutton2"><i class="bi bi-three-dots"></i></button>
+                    <input type="text" id="search-input" class="searchbar form-control"
+                        placeholder="Search Name, Phone Number, Email">
+                    <button id="search-button" class="btn custombutton" style="display: none;"><i
+                            class="bi bi-search"></i></button>
+                    <button id="cancel-button" class="btn custombutton" style="display: none;"><i
+                            class="bi bi-x"></i></button>
+                    <button id="add-contact-button" class="btn custombutton custombutton1"><i
+                            class="bi bi-plus"></i></button>
+                    <button id="menu-button" class="btn custombutton custombutton2"><i
+                            class="bi bi-three-dots"></i></button>
+
                 </div>
             </div>
         </div>
@@ -66,9 +74,16 @@
         </div>
 
 
+        <!-- Scrollable Contacts List -->
+        <div class="row overflow-auto justify-content-center mb-5 hide-scrollbar search-list-container">
+            <div class="col-sm-12 d-flex flex-column align-items-center search-list">
+            </div>
+
+        </div>
 
         <!-- Scrollable Contacts List -->
-        <div class="row overflow-auto justify-content-center mb-5 hide-scrollbar" style="max-height: calc(100vh - 200px);">
+        <div class="row overflow-auto justify-content-center mb-5 hide-scrollbar"
+            style="max-height: calc(100vh - 200px);">
             <div class="col-sm-12 d-flex flex-column align-items-center mt-3 contacts-list">
                 <!-- Contacts will be injected here -->
             </div>

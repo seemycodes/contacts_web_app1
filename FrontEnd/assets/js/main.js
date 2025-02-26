@@ -75,11 +75,25 @@ async function loadContacts(retries = 3) {
 
 function groupContactsByAlphabet(contacts) {
     const grouped = {};
+
     contacts.forEach(contact => {
-        const letter = contact.firstName[0].toUpperCase();
+        console.log("Processing contact:", contact); // Debugging: Log full contact
+
+        // Ensure `firstName` exists and is a string
+        if (!contact || typeof contact.firstName !== "string" || contact.firstName.trim() === "") {
+            console.warn("Skipping contact due to missing firstName:", contact);
+            return;
+        }
+
+        const firstName = contact.firstName.trim();
+        console.log("Valid First Name:", firstName); // Debugging: Log actual first names
+
+        const letter = firstName[0].toUpperCase(); // Get first letter
+
         if (!grouped[letter]) grouped[letter] = [];
         grouped[letter].push(contact);
     });
+
     return grouped;
 }
 
@@ -561,5 +575,284 @@ async function createContact() {
     } catch (error) {
         console.error("Error adding contact:", error);
         alert("Failed to add contact. Please try again.");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-input");
+    const searchButton = document.getElementById("search-button");
+    const cancelButton = document.getElementById("cancel-button");
+    const addContactButton = document.getElementById("add-contact-button");
+    const menuButton = document.getElementById("menu-button");
+    const contactList = document.querySelector(".contacts-list");
+    const searchList = document.querySelector(".search-list-container");
+
+    let searchTimeout;
+
+    // When clicking the search bar, replace buttons
+    searchInput.addEventListener("focus", function () {
+        contactList.style.display = "none"; // Hide main contact list
+        searchList.style.display = "flex"; // Show search results section
+        searchButton.style.display = "inline-block";
+        cancelButton.style.display = "inline-block";
+        addContactButton.style.display = "none";
+        menuButton.style.display = "none";
+    });
+
+    // When clicking search button, fetch search results
+    searchButton.addEventListener("click", function () {
+        const query = searchInput.value.trim();
+        if (query) {
+            fetchContactByQuery(query);
+        }
+    });
+
+    // When clicking cancel, revert back UI and reload contacts
+    cancelButton.addEventListener("click", function () {
+        searchInput.value = ""; // Clear search input
+        searchButton.style.display = "none";
+        cancelButton.style.display = "none";
+        addContactButton.style.display = "inline-block";
+        menuButton.style.display = "inline-block";
+        searchList.style.display = "none"; // Hide search results
+        contactList.style.display = "flex"; // Show main contact list
+        loadContacts(); // Reload full contact list
+    });
+
+    async function fetchContactByQuery(query) {
+        if (!query) {
+            loadContacts(); // Restore full contact list if query is empty
+            return;
+        }
+
+        try {
+            console.log(`Fetching contacts by query: ${query}`);
+
+            const response = await fetch(`${apiBaseUrl}/contacts/search/?query=${encodeURIComponent(query)}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch contacts. Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Search Results:", data);
+
+            // Ensure API returns an array
+            if (!Array.isArray(data)) {
+                throw new Error("Invalid API response: Expected an array.");
+            }
+
+            //  normalize all contact before using it
+            const mappedContacts = data.map(contact => normalizeContact(contact));
+
+            if (mappedContacts.length === 0) {
+                console.warn("No contacts found for query:", query);
+                renderContacts([]); // Show empty result
+            } else {
+                renderContacts(mappedContacts); // Render normalized contacts
+            }
+        } catch (error) {
+            console.error("Error fetching contacts:", error);
+            renderContacts([]); // Render empty result on error
+        }
+    }
+
+    //Render search results in `search-list-container`
+    async function renderSearchResults(contactsData) {
+        searchList.innerHTML = ""; // Clear previous search results
+
+        const groupedContacts = groupContactsByAlphabet(contactsData);
+
+        Object.keys(groupedContacts).sort().forEach(letter => {
+            const group = groupedContacts[letter];
+
+            // Alphabet section header
+            const sectionHeader = document.createElement("div");
+            sectionHeader.classList.add("contact-section-header");
+            sectionHeader.innerHTML = `<h3 class="contact-alphabet-header">${letter}</h3>`;
+            searchList.appendChild(sectionHeader);
+
+            // Generate contacts
+            group.forEach((contact, index) => {
+                const firstName = contact.firstName || "Unknown";
+                const lastName = contact.lastName || "";
+                const fullName = `${firstName} ${lastName}`.trim();
+                const email = contact.email || "No email provided";
+                const phone = contact.phone || "No phone provided";
+                const image = contact.image || "https://www.pngall.com/wp-content/uploads/15/User.png";
+
+                let cardClass = ["contacts-card"];
+                if (group.length === 1) cardClass.push("contacts-card-no-child");
+                else if (index === 0) cardClass.push("contacts-card-top");
+                else if (index === group.length - 1) cardClass.push("contacts-card-bottom");
+
+                const card = document.createElement("div");
+                card.classList.add(...cardClass);
+                card.setAttribute("data-id", contact.id);
+                card.setAttribute("data-group", letter);
+                card.innerHTML = `
+                    <div class="contact-main">
+                        <div class="contact-info">
+                            <img class="contact-img" src="${image}" alt="User">
+                            <span class="contact-name">${fullName}</span>
+                        </div>
+                        <div class="contact-actions">
+                            <button class="contact-btn call-btn" onclick="event.stopPropagation(); window.location.href='tel:${phone}';">
+                                <i class="bi bi-telephone"></i>
+                            </button>
+                            <button class="contact-btn email-btn" onclick="event.stopPropagation(); window.location.href='mailto:${email}';">
+                                <i class="bi bi-envelope"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="contact-details">
+                        <div class="contact-info-expanded">
+                            <div class="contact-details-expanded-header">
+                                <div class="contact-img-container">
+                                    <img class="contact-img-large" src="${image}" alt="User">
+                                </div>
+                                <div class="contact-text-container">
+                                    <div class="expanded-contact-details-text">
+                                        <h6 class="expanded-contact-name">${fullName}</h6>
+                                        <h6>Email</h6>
+                                        <p>${email}</p>
+                                        <h6>Phone</h6>
+                                        <p>${phone}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="expanded-actions">
+                                <button class="contact-btn email-btn" onclick="event.stopPropagation(); window.location.href='tel:${phone}';">
+                                    <i class="bi bi-telephone"></i>
+                                </button>
+                                <button class="contact-btn email-btn" onclick="event.stopPropagation(); window.location.href='mailto:${email}';">
+                                    <i class="bi bi-envelope"></i>
+                                </button>
+                                <button class="custom-edit-button" data-id="${contact.id}">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                                <button class="custom-delete-button" data-id="${contact.id}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+
+                searchList.appendChild(card);
+
+                // Event listener for expanding the contact card
+                card.addEventListener("click", function (event) {
+                    toggleCard(event, card);
+                });
+
+                // Event listener for edit button
+                const editButton = card.querySelector(".custom-edit-button");
+                editButton.addEventListener("click", function (event) {
+                    event.stopPropagation();
+                    openEditForm(contact.id);
+                });
+
+                // Event listener for delete button
+                const deleteButton = card.querySelector(".custom-delete-button");
+                deleteButton.addEventListener("click", function (event) {
+                    event.stopPropagation();
+                    deleteContact(contact.id);
+                });
+            });
+        });
+
+        console.log("Search results successfully rendered!");
+    }
+});
+
+
+
+async function fetchContactByQuery(query) {
+    if (!query) {
+        loadContacts(); // Restore full contact list if query is empty
+        return;
+    }
+
+    try {
+        const response = await fetch(`${apiBaseUrl}/contacts/search/?query=${encodeURIComponent(query)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch contacts. Status: ${response.status}`);
+        }
+
+        const contactsData = await response.json();
+        console.log("Search Results:", contactsData);
+
+        if (!Array.isArray(contactsData) || contactsData.length === 0) {
+            renderContacts([]); // Show empty result
+        } else {
+            renderContacts(contactsData);
+        }
+    } catch (error) {
+        console.error("Error fetching contacts:", error);
+    }
+}
+
+
+function normalizeContact(contact) {
+    return {
+        id: contact.id,
+        firstName: contact.first_name, // Convert API `first_name` to `firstName`
+        lastName: contact.last_name,   // Convert `last_name` to `lastName`
+        email: contact.email,
+        phone: contact.phone,
+        image: contact.image || "https://www.pngall.com/wp-content/uploads/15/User.png"
+    };
+}
+
+async function fetchContactByQuery(query) {
+    if (!query) {
+        loadContacts(); // Restore full contact list if query is empty
+        return;
+    }
+
+    try {
+        console.log(`Fetching contacts by query: ${query}`);
+
+        const response = await fetch(`${apiBaseUrl}/contacts/search/?query=${encodeURIComponent(query)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch contacts. Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Search Results:", data);
+
+        // Ensure API returns an array
+        if (!Array.isArray(data)) {
+            throw new Error("Invalid API response: Expected an array.");
+        }
+
+        // field-mapping
+        const mappedContacts = data.map(contact => normalizeContact(contact));
+
+        if (mappedContacts.length === 0) {
+            renderContacts([]); // Show empty result
+        } else {
+            renderContacts(mappedContacts); // Render the mapped contacts
+        }
+    } catch (error) {
+        console.error("Error fetching contacts:", error);
+        renderContacts([]); // Render empty result on error
     }
 }
