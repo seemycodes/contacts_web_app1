@@ -31,20 +31,25 @@
             </div>
         </div>
         
-        <!-- Admin Header Row (Fixed) -->
-        <div class="row sticky-top bg-white">
-            <div class="col-sm-12 d-flex justify-content-center p-2">
-                <div class="Admin-Header-container">
-                    <img src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
-                        alt="Admin Image">
-                    <h1>Admin User</h1>
-                    <p id="contact-count">Loading contacts...</p>
-                </div>
-            </div>
+<!-- Admin Header Row (Fixed) -->
+<div class="container sticky-top bg-white">
+    <div class="row d-flex align-items-center justify-content-start p-2">
+                <!-- Admin Details (Name + Contact Count) -->
+                <div class="col d-flex flex-column justify-content-center">
+                    <h3 class="mb-1">Admin User</h3>
+                    <p id="contact-count" class="mb-0">Loading contacts...</p>
+                </div>        
+        <!-- Profile Image -->
+        <div class="col-auto">
+            <img src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+                alt="Admin Image" class="img-fluid rounded-circle" style="width: 4rem; height: 4rem;">
         </div>
+    </div>
+</div>
 
+        
         <!-- Search Bar Row (Fixed) -->
-        <div class="row sticky-top bg-white">
+        <div class=" row sticky-top bg-white">
             <div class="col-sm-12 d-flex justify-content-center p-2">
                 <div class="searchbar-container">
                     <input type="text" id="search-input" class="searchbar form-control"
@@ -62,8 +67,8 @@
             </div>
         </div>
 
-        <div class="row justify-content-center mt-2" id="action-dropdown" style="display: none;">
-            <div class="col-sm-12 d-flex justify-content-center">
+        <div class="container row justify-content-center align-items-center mt-2" id="action-dropdown" style="display: none;">
+            <div class="col-sm-12 d-flex justify-content-center align-items-center">
                 <div class="dropdown-menu p-3 d-flex  align-items-center"
                     style="background: white; border: 1px solid #ccc; width: 100%; max-width: 1500px; display: flex; position: relative; z-index: 1000;">
                     <button class="btn btn-danger flex-grow-1 me-2" onclick="deleteAllContacts()">Delete All
@@ -75,14 +80,14 @@
 
 
         <!-- Scrollable Contacts List -->
-        <div class="row overflow-auto justify-content-center mb-5 hide-scrollbar search-list-container">
+        <div class="container row overflow-auto align-items-center justify-content-center mb-5 hide-scrollbar search-list-container">
             <div class="col-sm-12 d-flex flex-column align-items-center search-list">
             </div>
 
         </div>
 
         <!-- Scrollable Contacts List -->
-        <div class="row overflow-auto justify-content-center mb-5 hide-scrollbar"
+        <div class="container row overflow-auto justify-content-center mb-5 hide-scrollbar"
             style="max-height: calc(100vh - 200px);">
             <div class="col-sm-12 d-flex flex-column align-items-center mt-3 contacts-list">
                 <!-- Contacts will be injected here -->

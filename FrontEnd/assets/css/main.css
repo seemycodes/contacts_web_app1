@@ -8,11 +8,12 @@ body {
 }
 
 .headertitle-container{
-    height: 250px;
+    height: 200px;
 }
 .headerfont {
-    font-size: 48px;
+    font-size: 2.3rem;
     text-align: center;
+    font-weight: 500;
 }
 
 .headerrow {
@@ -21,92 +22,6 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 400;
-}
-
-.Admin-Header-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px 0;
-}
-
-.Admin-Header-container img {
-    width: 80px;
-    height: 80px;
-    border-radius: 100%;
-    object-fit: cover;
-}
-
-.Admin-Header-container h1 {
-    font-size: 30px;
-    margin: 0 10px;
-    font-weight: 400;
-}
-
-.Admin-Header-container p {
-    margin-left: auto;
-    text-align: right;
-    font-size: 16px;
-    color: #555;
-    font-weight: 500;
-}
-
-.searchbar-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 1500px;
-    justify-content: center;
-}
-
-.searchbar {
-    background-color: #EFEFEF;
-    color: black !important;
-    border-radius: 10rem;
-    height: 45px;
-    border: none;
-    flex-grow: 1;
-    padding: 0 15px;
-    margin: 9px;
-}
-
-::placeholder {
-    text-align: center;
-    font-size: 15px;
-    color: black;
-}
-
-/* Admin Header Container: Ensures Vertical Alignment */
-.Admin-Header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 10px 0;
-}
-
-.Admin-Header-container img {
-    width: 80px;
-    height: 80px;
-    border-radius: 100%;
-    object-fit: cover;
-    /* Ensures the image doesn't stretch */
-}
-
-.Admin-Header-container h1 {
-    font-size: 30px;
-    margin: 0 10px;
-    font-weight: 400;
-}
-
-.Admin-Header-container p {
-    margin-left: auto;
-    /* Moves "1800 contacts" to the right */
-    text-align: right;
-    font-size: 16px;
-    color: #555;
-    font-weight: 500;
 }
 
 .searchbar-container {
