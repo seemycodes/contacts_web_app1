@@ -82,10 +82,10 @@ Live API: [api.seemy.codes](https://api.seemy.codes)
 ---
 
 ## Future Updates  
-- Search Contacts  
-- UI/UX Improvements  
-- Dark Mode Support  
-- Login & Logout Authentication System  
-- Upload & Display Contact Images  
+- ✅ Search Contacts  
+- 🛠️UI/UX Improvements  
+- ⏳Dark Mode Support  
+- ⏳Login & Logout Authentication System  
+- ⏳Upload & Display Contact Images  
 
 
