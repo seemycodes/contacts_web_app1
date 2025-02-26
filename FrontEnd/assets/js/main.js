@@ -27,8 +27,9 @@ async function loadConfig() {
     }
 }
 
-async function loadContacts() {
+async function loadContacts(retries = 3) {
     try {
+        console.log(`Attempting to retry. Retries left: ${retries}`);
         const response = await fetch(`${apiBaseUrl}/contacts/`, {
             method: "GET",
             headers: {
@@ -62,9 +63,13 @@ async function loadContacts() {
         renderContacts(contacts); // Render contacts
     } catch (error) {
         console.error("Error loading contacts:", error.message);
-        document.getElementById("contact-count").textContent = "Failed to load contacts";
-        contacts = []; // Ensure contacts is always an array
-        renderContacts(contacts);
+        if (retries > 0) {
+            setTimeout(() => loadContacts(retries - 1), 2000); // Retry after 2s
+        } else {
+            document.getElementById("contact-count").textContent = "Failed to load contacts";
+            contacts = []; // Ensure contacts is always an array
+            renderContacts(contacts);
+        }
     }
 }
 
@@ -233,6 +238,9 @@ function saveContact() {
     closeForm();
 }
 
+// Ensure `config.json` is loaded before making API calls
+document.addEventListener("DOMContentLoaded", loadConfig);
+
 document.addEventListener("DOMContentLoaded", () => {
     loadContacts();
     document.querySelector(".custombutton1").addEventListener("click", openForm);
@@ -285,8 +293,6 @@ function saveContact() {
     closeForm();
 }
 
-// Ensure `config.json` is loaded before making API calls
-document.addEventListener("DOMContentLoaded", loadConfig);
 
 document.addEventListener("DOMContentLoaded", function () {
     const phoneInput = document.querySelector("#contact-phone");
