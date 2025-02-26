@@ -32,6 +32,15 @@ def get_db():
 def get_contacts(db: Session = Depends(get_db)):
     return crud.get_contacts(db)
 
+@app.get("/contacts/search/", response_model=list[schemas.ContactResponse])
+def search_contacts(query: str, db: Session = Depends(get_db)):
+    results = crud.get_contacts_by_query(db, query)
+    
+    if not results:
+        raise HTTPException(status_code=404, detail="No contacts found matching your search.")
+    
+    return results
+
 @app.post("/contacts/", response_model=schemas.ContactResponse)
 def create_contact(contact: schemas.ContactCreate, db: Session = Depends(get_db)):
     return crud.create_contact(db, contact)

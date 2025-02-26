@@ -16,6 +16,23 @@ def create_contact(db: Session, contact: schemas.ContactCreate):
 def get_contacts(db: Session):
     return db.query(models.Contact).all()
 
+def get_contacts_by_query(db: Session, query: str):
+    """
+    Fetch contacts Case-insensitive, partial match.
+    """
+    if not query:
+        return []
+
+    query = f"%{query}%"  # Enable SQL LIKE search for partial matches
+
+    return db.query(models.Contact).filter(
+        (models.Contact.first_name.ilike(query)) |
+        (models.Contact.last_name.ilike(query)) |
+        (models.Contact.phone.ilike(query)) |
+        (models.Contact.email.ilike(query))
+    ).all()
+
+
 def update_contact(db: Session, contact_id: int, contact_update: dict):
     db_contact = db.query(models.Contact).filter(models.Contact.id == contact_id).first()
     if not db_contact:
